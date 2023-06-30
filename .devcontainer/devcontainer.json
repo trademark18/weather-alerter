@@ -1,0 +1,51 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+  "name": "Trek10",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "USERNAME": "node"
+    }
+  },
+  //"image": "mcr.microsoft.com/devcontainers/typescript-node:18-bullseye",
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/python:1": {},
+    "ghcr.io/customink/codespaces-features/sam-cli:1": {},
+    "ghcr.io/devcontainers-contrib/features/aws-cdk:2": {},
+    "ghcr.io/devcontainers-contrib/features/serverless:2": {},
+    "ghcr.io/devcontainers-contrib/features/terraform-asdf:2": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "bash .devcontainer/post_create.sh ${containerWorkspaceFolder}",
+  "postStartCommand": "bash .devcontainer/post_start.sh ${containerWorkspaceFolder}",
+  "initializeCommand": "bash .devcontainer/initialize.sh ${localEnv:HOME}${localEnv:USERPROFILE}",
+  "mounts": [
+    "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws,target=/home/node/.aws,consistency=cached",
+    "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.awsume,target=/home/node/.awsume,consistency=cached",
+    "type=bind,source=${localEnv:HOME}${localEnv:USERPROFILE}/.trek10,target=/home/node/.trek10,consistency=cached",
+    "type=volume,source=${containerWorkspaceFolderBasename}-bashhistory,target=/commandhistory"
+  ],
+  "containerEnv": {
+    "SAM_CLI_TELEMETRY": "0"
+  },
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "kddejong.vscode-cfn-lint",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "shalimski.swapdiff",
+        "Gruntfuggly.todo-tree"
+      ]
+    }
+  }
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  //"remoteUser": "root"
+}
