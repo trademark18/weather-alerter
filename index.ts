@@ -13,6 +13,19 @@ enum AppEvents {
   WeatherSummary = 'weather-summary'
 }
 
+interface IEvent<T> {
+  target: string;
+  id: string;
+  name: string;
+  body: T;
+  time: number;
+  delay: number;
+}
+
+interface ISummaryEvent {
+  summaryMessage: string;
+}
+
 // Every morning at 8 AM, initiate a weather check
 schedule('Morning weather check').cron('0 8 ? * * *', () => {
   console.log('Doing regularly-scheduled weather check')
@@ -20,7 +33,7 @@ schedule('Morning weather check').cron('0 8 ? * * *', () => {
 });
 
 // Every morning at 8 AM, initiate a weather check
-schedule('Test weather check').cron('25 14 ? * * *', () => {
+schedule('Test weather check').cron('40 14 ? * * *', () => {
   console.log('Doing regularly-scheduled weather check')
   events.publish(AppEvents.CheckWeather, {})
 });
@@ -32,13 +45,13 @@ events.on(AppEvents.CheckWeather, async () => {
 
   // Get a message that says whether it's a good day to drive
   const summaryMessage = getWeatherMessage(weather);
-  events.publish(AppEvents.WeatherSummary, summaryMessage);
+  events.publish(AppEvents.WeatherSummary, { summaryMessage });
 });
 
 // Handle notification
-events.on(AppEvents.WeatherSummary, async (summaryMessage:string) => {
+events.on(AppEvents.WeatherSummary, async (event: IEvent<ISummaryEvent>) => {
   // Send that by Pushbullet
-  await notificationManager.send(summaryMessage);
+  await notificationManager.send(event.body.summaryMessage);
   console.log('Done sending message');
 });
 
