@@ -34,7 +34,7 @@ schedule('Morning weather check').cron('0 8 ? * * *', async () => {
 });
 
 // Every morning at 8 AM, initiate a weather check
-schedule('Test weather check').cron('28 11 ? * * *', async () => {
+schedule('Test weather check').cron('34 11 ? * * *', async () => {
   console.log('Doing scheduled test weather check');
   await doWeatherCheck();
   // events.publish(AppEvents.CheckWeather, {})
