@@ -33,7 +33,7 @@ schedule('Morning weather check').cron('0 8 ? * * *', () => {
 });
 
 // Every morning at 8 AM, initiate a weather check
-schedule('Test weather check').cron('40 14 ? * * *', () => {
+schedule('Test weather check').cron('47 10 ? * * *', () => {
   console.log('Doing regularly-scheduled weather check')
   events.publish(AppEvents.CheckWeather, {})
 });
