@@ -27,23 +27,23 @@ interface ISummaryEvent {
 }
 
 // Every morning at 8 AM, initiate a weather check
-schedule('Morning weather check').cron('0 8 ? * * *', () => {
+schedule('Morning weather check').cron('0 8 ? * * *', async () => {
   console.log('Doing regularly-scheduled weather check');
-  doWeatherCheck();
+  await doWeatherCheck();
   // events.publish(AppEvents.CheckWeather, {})
 });
 
 // Every morning at 8 AM, initiate a weather check
-schedule('Test weather check').cron('5 11 ? * * *', () => {
+schedule('Test weather check').cron('23 11 ? * * *', async () => {
   console.log('Doing scheduled test weather check');
-  doWeatherCheck();
+  await doWeatherCheck();
   // events.publish(AppEvents.CheckWeather, {})
 });
 
 // Handle weather update
 events.on(AppEvents.CheckWeather, async () => {
   console.log(`Received check weather event`);
-  doWeatherCheck();
+  await doWeatherCheck();
   // events.publish(AppEvents.WeatherSummary, { summaryMessage });
 });
 
@@ -71,9 +71,9 @@ const sendNotification = async (message: string) => {
 /**
  * A testing endpoint to allow for easier development
  */
-publicApi.get("/test", (req, res) => {
+publicApi.get("/test", async (req, res) => {
   console.log('Triggering a test request via the browser');
-  doWeatherCheck();
+  await doWeatherCheck();
   // events.publish(AppEvents.CheckWeather, {});
   return res.status(200).send({ message: "Hello from the public api!" });
 });
