@@ -16,6 +16,7 @@ export class NotificationManager implements INotificationManager {
   }
 
   send = async (message: string): Promise<void> => {
+    console.log(`Sending message via pushbullet`);
     const data = {
       type: 'note',
       title: 'Classic Car Weather Verdict',

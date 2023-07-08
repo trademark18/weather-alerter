@@ -34,12 +34,13 @@ schedule('Morning weather check').cron('0 8 ? * * *', () => {
 
 // Every morning at 8 AM, initiate a weather check
 schedule('Test weather check').cron('5 11 ? * * *', () => {
-  console.log('Doing regularly-scheduled weather check')
+  console.log('Doing scheduled test weather check')
   events.publish(AppEvents.CheckWeather, {})
 });
 
 // Handle weather update
 events.on(AppEvents.CheckWeather, async () => {
+  console.log(`Received check weather event`);
   // Retrieve weather forecast
   const weather = await getWeather();
 
@@ -51,6 +52,7 @@ events.on(AppEvents.CheckWeather, async () => {
 // Handle notification
 events.on(AppEvents.WeatherSummary, async (event: IEvent<ISummaryEvent>) => {
   // Send that by Pushbullet
+  console.log(`Received weather summary event`);
   await notificationManager.send(event.body.summaryMessage);
   console.log('Done sending message');
 });
