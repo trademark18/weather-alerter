@@ -27,13 +27,13 @@ interface ISummaryEvent {
 }
 
 // Every morning at 8 AM, initiate a weather check
-schedule('Morning weather check').cron('0 8 * * ? *', () => {
+schedule('Morning weather check').cron('0 8 ? * * *', () => {
   console.log('Doing regularly-scheduled weather check')
   events.publish(AppEvents.CheckWeather, {})
 });
 
 // Every morning at 8 AM, initiate a weather check
-schedule('Test weather check').cron('55 10 * * ? *', () => {
+schedule('Test weather check').cron('5 11 ? * * *', () => {
   console.log('Doing regularly-scheduled weather check')
   events.publish(AppEvents.CheckWeather, {})
 });
