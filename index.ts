@@ -28,41 +28,53 @@ interface ISummaryEvent {
 
 // Every morning at 8 AM, initiate a weather check
 schedule('Morning weather check').cron('0 8 ? * * *', () => {
-  console.log('Doing regularly-scheduled weather check')
-  events.publish(AppEvents.CheckWeather, {})
+  console.log('Doing regularly-scheduled weather check');
+  doWeatherCheck();
+  // events.publish(AppEvents.CheckWeather, {})
 });
 
 // Every morning at 8 AM, initiate a weather check
 schedule('Test weather check').cron('5 11 ? * * *', () => {
-  console.log('Doing scheduled test weather check')
-  events.publish(AppEvents.CheckWeather, {})
+  console.log('Doing scheduled test weather check');
+  doWeatherCheck();
+  // events.publish(AppEvents.CheckWeather, {})
 });
 
 // Handle weather update
 events.on(AppEvents.CheckWeather, async () => {
   console.log(`Received check weather event`);
+  doWeatherCheck();
+  // events.publish(AppEvents.WeatherSummary, { summaryMessage });
+});
+
+const doWeatherCheck = async () => {
   // Retrieve weather forecast
   const weather = await getWeather();
 
   // Get a message that says whether it's a good day to drive
   const summaryMessage = getWeatherMessage(weather);
-  events.publish(AppEvents.WeatherSummary, { summaryMessage });
-});
+  await sendNotification(summaryMessage);
+}
 
 // Handle notification
 events.on(AppEvents.WeatherSummary, async (event: IEvent<ISummaryEvent>) => {
   // Send that by Pushbullet
   console.log(`Received weather summary event`);
-  await notificationManager.send(event.body.summaryMessage);
-  console.log('Done sending message');
+  await sendNotification(event.body.summaryMessage);
 });
+
+const sendNotification = async (message: string) => {
+  await notificationManager.send(message);
+  console.log('Done sending message');
+}
 
 /**
  * A testing endpoint to allow for easier development
  */
 publicApi.get("/test", (req, res) => {
   console.log('Triggering a test request via the browser');
-  events.publish(AppEvents.CheckWeather, {});
+  doWeatherCheck();
+  // events.publish(AppEvents.CheckWeather, {});
   return res.status(200).send({ message: "Hello from the public api!" });
 });
 
