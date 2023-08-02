@@ -27,7 +27,7 @@ interface ISummaryEvent {
 }
 
 // Every morning at 8 AM, initiate a weather check
-schedule('Morning weather check').cron('0 12 ? * * *', async () => {
+schedule('Morning weather check').cron('55 11 ? * * *', async () => {
   console.log('Doing regularly-scheduled weather check');
   await doWeatherCheck();
   // events.publish(AppEvents.CheckWeather, {})
